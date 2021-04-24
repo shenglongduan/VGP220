@@ -3,6 +3,7 @@
 
 //Name:ShenglongDuan
 //StudentId:2032587
+//Grade: 90/100
 
 int RecursiveMultiplication(int a, int b);
 
@@ -18,16 +19,34 @@ int main(int argc, char* argv[]) {
     //Tests:
     std::cout << RecursiveMultiplication(2, 5) << std::endl; // Expected result: 10
 
-    std::cout << NonRecursiveFibonacci(5) << std::endl; //Expected result: 5
+    std::cout << NonRecursiveFibonacci(8) << std::endl; //Expected result: 5
 
-    PrintFibonacciLessThan15(7); //Expected result: 0 1 1 2 3 5 8 13
+    PrintFibonacciLessThan15(14); //Expected result: 0 1 1 2 3 5 8 13
 
     std::cout << std::endl;// ->Adding an extra line
 
-    printRecursiveFactorialLessThan50(10);//Expected result: 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1
+    printRecursiveFactorialLessThan50(49);//Expected result: 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1
 
     return 0;
 }
+//ERROR: -10. You are getting stack overflow. Probably stuck in a infinite call in the first
+//recursive call when a goes to negative.
+//A good answer for this question is:
+//int RecursiveMultiplication(int a, int b)
+//{
+//	if (b == 0) 
+//	{
+//		return 0;
+//	}
+//	if (b > 0) 
+//	{
+//		return a + RecursiveMultiplication(a, b - 1);
+//	}
+//	if (b < 0) 
+//	{
+//		return -RecursiveMultiplication(a, -b);
+//	}
+//}
 
 int RecursiveMultiplication(int a, int b) {
     //TODO: Write a recursive function to multiply two positive integers
@@ -43,6 +62,7 @@ int RecursiveMultiplication(int a, int b) {
     }
 }
 
+//COMMENT: Perfect!
 int NonRecursiveFibonacci(int n) {
     //TODO: Convert the recursive fibonacci that we did in class
     //to a non recursive method, using a bottom-up approach.
@@ -60,6 +80,7 @@ int NonRecursiveFibonacci(int n) {
     return c;
 }
 
+//COMMENT: GOOD!
 int PrintFibonacciLessThan15(int n) {
     //TODO: Create a method that will print all the fibonacci sequence
     //less than 15. The way that you should print is:
@@ -79,6 +100,7 @@ int PrintFibonacciLessThan15(int n) {
     return 0;
 }
 
+//COMMENT: GOOD!
 int printRecursiveFactorialLessThan50(int n) {
     //TODO: Create a method that will print recursive
     //the factorial multiplication format of a number that is less than 50.
