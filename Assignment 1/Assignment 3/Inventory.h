@@ -1,10 +1,12 @@
 #pragma once
 
 #include <iostream>
-#include "Item.h"
+#include "ltem.h"
 
-class Inventory {
+class Inventory 
+{
 public:
+    //COMMENT: Use more often the initialization list.
     Inventory() {
         //TODO: Implement a default constructor for the Inventory class where the max number of slots
         // is 5 and all the slots are free (They are not occupied).
@@ -13,6 +15,7 @@ public:
         mInventory = new Item[5];
     }
 
+    //COMMENT: Use more often the initialization list.
     Inventory(uint32_t capacity) {
         //TODO: Implement a non default constructor for the Inventory class where
         //all the slots are free (They are not occupied).
@@ -22,6 +25,7 @@ public:
 
     }
 
+    //ERROR: -1. You don't need to use this->mInventory. You should use just mInventory.
     Inventory(const Inventory& other) {
         //TODO: Implement a copy constructor for this class. Avoid shallow copy.
         mMaxSlots = other.mMaxSlots;
@@ -33,6 +37,10 @@ public:
         }
     }
 
+    //ERROR: -10. You don't need to use this->mInventory. You should use just mInventory.
+    //Also, in the move constructor yopu should move the other not copy it... 
+    //mInventory = other.mInventory;
+    //other.mInventory = nullptr;
     Inventory(Inventory&& other) {
         //TODO: Implement a move constructor for this class. Reset to a default state the other inventory.
         mMaxSlots = other.mMaxSlots;
@@ -44,11 +52,14 @@ public:
         }
     }
 
+    //ERROR: -2. Dangling pointer. Forgot to set mInventory = nullptr.
     ~Inventory() {
         //TODO: Implement a destructor for this class.
         delete[] mInventory;
     }
 
+    //ERROR: -3. You don't need to use this->mInventory. You should use just mInventory.
+    //You should check also if they are not equal. And just copy if they are not.
     //TODO: Implement a copy assignment operator
     Inventory& operator=(const Inventory& other) {
         if (this == &other) return *this;
@@ -65,6 +76,8 @@ public:
     }
     //TODO: Implement a move assignment operator
 
+    //ERROR: -10. You don't need to use this->mInventory. You should use just mInventory.
+    //Again, you are copying here and not moving.
     Inventory& operator=(Inventory&& other) noexcept {
         if (this == &other) return *this;
         delete[] this->mInventory;
@@ -78,6 +91,57 @@ public:
         }
         return *this;
     }
+
+
+    //ERROR: -5. Your add item is not calculating the item quantity properly.
+    //Also, when you add a special case it's adding a different number of slots than the required ammount.
+    //follow the correct code to check:
+    //void AddItem(Item newItem)
+    //{
+    //    if (!isFullForItem(&newItem))
+    //    {
+    //        int slotIndex = SearchItemByNameLessThan50(newItem.name);
+    //        //I have this Item in inventory
+    //        if (slotIndex != -1)
+    //        {
+    //            int futureQuantity = mInventory[slotIndex].quantity + newItem.quantity;
+    //            if (futureQuantity > 50)
+    //            {
+    //                newItem.quantity = futureQuantity - 50;
+    //                mInventory[slotIndex].quantity = 50;
+    //                mInventory[mSlotsOccupied] = newItem;
+    //                mSlotsOccupied++;
+    //                return;
+    //            }
+
+    //            mInventory[slotIndex].quantity += newItem.quantity;
+    //            return;
+    //        }
+    //        //Inserting for the first time
+    //        else
+    //        {
+    //            //Expanding inventory;
+    //            if ((newItem.type == ItemType::Charm) && (newItem.name.compare("Expansion") == 0))
+    //            {
+    //                Item* temp = mInventory;
+    //                mMaxSlots += 5;
+    //                mInventory = new Item[mMaxSlots];
+    //                for (int i = 0; i < mSlotsOccupied; ++i)
+    //                {
+    //                    mInventory[i] = temp[i];
+    //                }
+    //                delete[] temp;
+    //                temp = nullptr;
+    //            }
+
+    //            //After expansion, insert.
+    //            mInventory[mSlotsOccupied] = newItem;
+    //            mSlotsOccupied++;
+    //        }
+    //    }
+
+    //    std::cout << "Adding " << newItem.quantity << " " << newItem.name << " in inventory." << "\n";
+    //}
 
     void AddItem(Item newItem) {
         //TODO: Implement AddItem MethodThis method adds a new item to the inventory.
@@ -160,6 +224,44 @@ public:
         //should expand adding 5 more empty slots for the user.
     }
 
+    //ERROR -5: RemoveItem is simpler than this. Also your remove item is damaging the main data structure.
+    //After you remove, you can't add anything else. A good example of remove item:
+    //void RemoveItem(std::string itemName, int quantity)
+    //{
+    //    bool isExpansion = itemName.compare("Expansion") == 0;
+    //    if (mSlotsOccupied != 0)
+    //    {
+    //        int slotIndex = SearchItemByName(itemName);
+    //        if (slotIndex == -1)
+    //        {
+    //            std::cout << "Item not found.\n";
+    //            return;
+    //        }
+
+    //        //Remove whole item.
+    //        if (quantity >= mInventory[slotIndex].quantity)
+    //        {
+    //            for (int i = slotIndex; i < mSlotsOccupied - 1; ++i)
+    //            {
+    //                mInventory[i] = mInventory[i + 1];
+    //            }
+    //            mSlotsOccupied--;
+    //            //Special case
+    //            if (isExpansion && (SearchItemByName(itemName) == -1))
+    //            {
+    //                mMaxSlots -= 5;
+    //            }
+    //        }
+    //        //Remove some quantity
+    //        else
+    //        {
+    //            mInventory[slotIndex].quantity -= quantity;
+    //        }
+    //    }
+
+    //    std::cout << "Removing " << quantity << " " << itemName << " from inventory." << "\n";
+    //}
+
     void RemoveItem(std::string itemName, int quantity) {
         //TODO: Implement RemoveItem method
         //RemoveItem, should remove a quantity from the slot with the item. If the whole slot
@@ -217,6 +319,7 @@ public:
         //should reduce the number of slots in 5, discarting all the items from the removed slots.
     }
 
+    //COMMENT: You should remove an Item using the RemoveItem function. 
     Item* UseItem(std::string itemName) {
         // TODO: Search for the item and if it exists, return this item and remove one from the inventory
         // otherwise, return nullptr.
@@ -282,4 +385,4 @@ private:
         }
         return false;
     }
-}; #pragma once
+};

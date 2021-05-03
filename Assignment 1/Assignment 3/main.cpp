@@ -1,6 +1,11 @@
 #include <iostream>
 #include "Inventory.h"
 
+//Grade: 54/100. Pay more attention during the class. All of the errors in this assignment
+//was related to the previous class. Put more effort.
+
+//ERROR: -10. Code was not compiling. Including the wrong class and extra pragma once in Inventory.cpp.
+
 int main(int argc, char* argv[]) {
     Item hps{ "Healing Potion", 12, ItemType::Potion };
     Item poisonPotion{ "Poison Potion", 5, ItemType::Potion };
